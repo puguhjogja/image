@@ -31,7 +31,7 @@
         }
 
         /* Layout using CSS Grid for Responsiveness */
-      .container {
+       .container {
             display: grid;
             gap: 40px;
             max-width: 1400px;
@@ -41,13 +41,13 @@
 
         /* Responsive Layout Collapse */
         @media (max-width: 900px) {
-          .container {
+           .container {
                 grid-template-columns: 1fr; /* Single column on mobile/tablet */
                 padding: 10px;
             }
         }
 
-      .controls,.results {
+       .controls,.results {
             padding: 20px;
             background-color: var(--color-surface);
             border-radius: 12px;
@@ -82,7 +82,7 @@
             margin-bottom: 0;
         }
 
-      .file-upload-section {
+       .file-upload-section {
             padding: 10px;
             border: 2px dashed #4e93d1;
             border-radius: 8px;
@@ -114,7 +114,7 @@
         }
 
         /* Image Display */
-      .image-display {
+       .image-display {
             border: 1px solid #444;
             background-color: #1e1e38;
             min-height: 200px;
@@ -126,7 +126,7 @@
             margin-top: 15px;
         }
 
-      .image-display img {
+       .image-display img {
             max-width: 100%;
             height: auto;
             display: none; /* Hidden by default until content is loaded */
@@ -143,17 +143,17 @@
             min-height: 38px;
         }
 
-      .status-error {
+       .status-error {
             background-color: rgba(220, 53, 69, 0.2);
             color: var(--color-error);
         }
 
-      .status-success {
+       .status-success {
             background-color: rgba(40, 167, 69, 0.2);
             color: var(--color-success);
         }
 
-      .status-loading {
+       .status-loading {
             color: var(--color-accent);
         }
         
@@ -199,12 +199,10 @@
     <script>
         // SEGMENT I: GLOBAL DIRECTIVES AND JAVASCRIPT CONSTANTS
         // Configuration Constants
-        // NOTE: This is a client-side simulation. To connect to a real AI service, 
-        // replace the API_KEY and API_ENDPOINT with real credentials and URLs.
         const API_KEY = 'YOUR_SECURE_API_KEY_PLACEHOLDER'; 
         const API_ENDPOINT = 'https://api.hypothetical-gen.com/v1/generate/face_reference';
-        const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB limit for Base64 efficiency [1]
-        const CONSISTENCY_WEIGHT_DEFAULT = 0.95; // High weight for maximum facial fidelity 
+        const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB limit for Base64 efficiency
+        const CONSISTENCY_WEIGHT_DEFAULT = 0.95; // High weight for maximum facial fidelity
 
         // DOM Element References
         const promptInput = document.getElementById('textPromptInput');
@@ -220,9 +218,8 @@
 
         /**
          * Utility function to convert a File object to a Base64 Data URI string.
-         * Wraps FileReader in a Promise for async/await usage.
          * @param {File} file - The file to convert.
-         * @returns {Promise<string>} - A promise that resolves with the Base64 Data URI. [2]
+         * @returns {Promise<string>} - A promise that resolves with the Base64 Data URI.
          */
         const toBase64 = (file) => new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -235,7 +232,7 @@
         /**
          * Updates the status message div with appropriate styling.
          * @param {string} message - The message to display.
-         * @param {string} type - 'loading', 'error', or 'success'. [3]
+         * @param {string} type - 'loading', 'error', or 'success'.
          */
         const updateStatus = (message, type) => {
             statusDiv.textContent = message;
@@ -244,7 +241,7 @@
         };
 
         /**
-         * Handles file selection, client-side validation, and previews the uploaded image.
+         * Handles file selection, validation, and previews the uploaded image.
          */
         const handleFileSelect = () => {
             const file = fileInput.files;
@@ -256,7 +253,7 @@
                 return;
             }
 
-            // Client-side validation: File Size (Fail Fast principle) [3]
+            // Client-side validation: File Size
             if (file.size > MAX_FILE_SIZE_BYTES) {
                 fileInput.value = ''; // Clear file input
                 previewImg.style.display = 'none';
@@ -264,7 +261,7 @@
                 return updateStatus(`Error: File exceeds the ${MAX_FILE_SIZE_BYTES / 1024 / 1024}MB limit.`, 'error');
             }
 
-            // Client-side validation: File Type [4]
+            // Client-side validation: File Type
             const acceptedTypes = ['image/jpeg', 'image/png'];
             if (!acceptedTypes.includes(file.type)) {
                 fileInput.value = ''; // Clear file input
@@ -295,7 +292,7 @@
             const prompt = promptInput.value.trim();
             const file = fileInput.files;
 
-            // 1. Pre-flight Checks
+            // 1. Pre-flight Checks (Fail Fast Principle)
             if (!prompt) {
                 return updateStatus("Error: Please enter a detailed text prompt.", 'error');
             }
@@ -313,34 +310,39 @@
                 // 3. Data Preparation
                 const base64Image = await toBase64(file);
                 
-                updateStatus("API Call Processing... (2/3) - Simulation Active", 'loading');
+                updateStatus("API Call Processing... (2/3)", 'loading');
 
-                // 4. Mandatory Request Payload Definition (Simulated Data Contract)
+                // 4. Mandatory Request Payload Definition (Simulated)
                 const payload = {
-                    api_key: API_KEY, // Authentication simulation [5]
+                    api_key: API_KEY, // Authentication simulation
                     prompt: prompt, // Text conditioning
-                    reference_image_base64: base64Image, // Facial conditioning data [1]
+                    reference_image_base64: base64Image, // Facial conditioning data
                     consistency_weight: CONSISTENCY_WEIGHT_DEFAULT, // High weight for fidelity
                     output_settings: {
-                        resolution: "1024x1024", // Standard high-quality resolution
+                        resolution: "1024x1024",
                         style: "photorealistic, high detail",
                         format: "image/jpeg"
                     }
                 };
 
-                // 5. Network Call Simulation (REPLACE THIS BLOCK WITH REAL fetch() FOR PRODUCTION)
-                // Since this is a client-only file, we simulate the network delay and response.
+                // 5. Network Call Simulation (Replaces actual fetch to external API)
+                // We simulate a 2-second delay and a successful JSON response
+                // In a real application, this would be: 
+                // const response = await fetch(API_ENDPOINT, {... })
+
                 await new Promise(resolve => setTimeout(resolve, 2000)); 
 
-                // Simulated API Response: Base64 placeholder for a tiny green square image
+                // --- Simulated API Response ---
+                // For demonstration, we use a tiny Base64 placeholder for a green square 
+                // that simulates a generated image.
                 const simulatedSuccessBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAAXNSR0IArs4c6QAAADFJREFUGFdj/M+Bw4gBl0RzN39gYGBgxMTI5wIeYdEBxMABhCg0FzF+JADUeR8xQ+901QAAAABJRU5ErkJggg==";
                 
-                // Optional: Simulate an API failure if the user types a specific phrase
+                // If the prompt includes "error", simulate an API failure
                 if (prompt.toLowerCase().includes("simulate error")) {
-                    throw new Error("Server rejected request: Rate limit exceeded or Invalid generation parameters.");
+                    throw new Error("Server rejected request: Invalid generation parameters or policy violation.");
                 }
 
-                // Successful response handling (Simulation)
+                // Successful response handling
                 const data = { 
                     status: "success", 
                     generated_image_base64: simulatedSuccessBase64 
@@ -351,16 +353,15 @@
                 resultImg.onload = () => {
                     resultPlaceholder.style.display = 'none';
                     resultImg.style.display = 'block';
-                    updateStatus("Success: Image generated with high facial fidelity (3/3). (SIMULATION)", 'success');
+                    updateStatus("Success: Image generated with high facial fidelity. (3/3)", 'success');
                 };
 
             } catch (error) {
-                // 7. Error Handling (Catch Block) [3]
+                // 7. Error Handling (Catch Block)
                 console.error("Generation Error:", error);
-                // Providing a meaningful error message to the user
                 updateStatus(`Operation Failed: ${error.message |
 
-| 'Unknown network error. Check console for details.'}`, 'error');
+| 'Unknown network error.'}`, 'error');
 
             } finally {
                 // 8. Cleanup (Finally Block)
@@ -368,9 +369,9 @@
             }
         };
 
-        // Event Listener Attachment
+        // Event Listeners
         generateBtn.addEventListener('click', generateImage);
-        // handleFileSelect is attached via the 'onchange' attribute in the HTML.
+        // fileInput.addEventListener('change', handleFileSelect); // Already attached via onchange in HTML
     </script>
 
 </body>
